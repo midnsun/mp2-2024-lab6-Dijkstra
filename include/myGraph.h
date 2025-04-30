@@ -2,6 +2,7 @@
 #include <iostream>
 #include <random>
 #include <limits>
+#include "../Graphviz/include/graphviz/gvc.h"
 
 template<typename T>
 bool operator <(const std::pair<size_t, T>& v1, const std::pair<size_t, T>& v2) { return v1.second < v2.second; }
@@ -117,12 +118,69 @@ public:
 		return data.size();
 	}
 	void print() const {
+		
 		for (size_t i = 0; i < data.size(); ++i) {
+			std::cout << i << '\t';
 			for (size_t j = 0; j < data[i].size(); ++j) {
 				std::cout << data[i][j].first << " " << data[i][j].second << "; ";
 			}
 			std::cout << std::endl;
 		}
+		
+		
+		/*
+		GVC_t* gvc;
+		Agraph_t* g;
+		FILE* fp;
+		gvc = gvContext();
+		fp = fopen("../example.dot", "r");
+//		g = agread(fp, 0); 
+		g = agopen(nullptr, Agdesc_t(), 0);
+		gvLayout(gvc, g, "dot");
+		gvRender(gvc, g, "plain", stdout);
+		gvFreeLayout(gvc, g);
+		agclose(g);
+		gvFreeContext(gvc);
+		*/
+		
+//		Agraph_t* g;
+//		Agnode_t* n, * m;
+//		Agedge_t* e;
+//		Agsym_t* a;
+//		GVC_t* gvc;
+//		Agdesc_t desc;
+//		desc.directed = true;
+//		desc.strict = false;
+//		/* set up a graphviz context */
+//		gvc = gvContext();
+//		/* parse command line args - minimally argv[0] sets layout engine */
+//		//		gvParseArgs(gvc, argc, argv);
+//		/* Create a simple digraph */
+//		char* charG = new char[2]; charG[0] = 'g'; charG[1] = '\0';
+//		char* charN = new char[2]; charG[0] = 'n'; charG[1] = '\0';
+//		char* charM = new char[2]; charG[0] = 'm'; charG[1] = '\0';
+//		char* charCOLOR = new char[6]; charCOLOR[0] = 'c'; charCOLOR[1] = 'o'; charCOLOR[2] = 'l'; charCOLOR[3] = 'o'; charCOLOR[4] = 'r'; charCOLOR[5] = '\0';
+//		g = agopen(charG, desc, NULL);
+//		n = agnode(g, charN, 1);
+//		m = agnode(g, charM, 1);
+//		e = agedge(g, n, m, 0, 1);
+//		/* Set an attribute - in this case one that affects the visible rendering */
+//		agsafeset(n, charCOLOR, "red", "");
+//		/* Compute a layout using layout engine from command line args */
+//		gvLayoutJobs(gvc, g);
+//		/* Write the graph according to -T and -o options */
+//		gvRenderJobs(gvc, g);
+//		/* Free layout data */
+//		gvFreeLayout(gvc, g);
+//		/* Free graph structures */
+//		agclose(g);
+//		/* close output file, free context, and return number of errors */
+//		gvFreeContext(gvc);
+//		delete[] charG;
+//		delete[] charN;
+//		delete[] charM;
+//		delete[] charCOLOR;
+//		
 	}
 	void scan() {
 		size_t e, en;
@@ -138,15 +196,37 @@ public:
 		}
 	}
 	void generate() {
+		std::cout << "Enter count of edges: " << std::endl;
+		size_t edgesCount;
+		std::cin >> edgesCount;
+
 		std::random_device r;
 		std::default_random_engine e(r());
-		std::uniform_int_distribution<size_t> gen_int(0, data.size());
+		std::uniform_int_distribution<size_t> gen_int(0, data.size() - 1);
+		size_t v1, v2, i;
 		std::uniform_real_distribution<double> gen_double(0.0, 1000.0);
+		double w;
+		bool FLAG;
 
-		for (size_t i = 0; i < data.size(); ++i) {
-			for (size_t j = 0; j < gen_int(e); ++j) {
-//				data[i].pushBack()
+		while (edgesCount > 0) {
+			--edgesCount;
+			v1 = gen_int(e);
+			v2 = gen_int(e);
+			if (v1 == v2) {
+				++edgesCount;
+				continue;
 			}
+			FLAG = false;
+			for (i = 0; i < data[v1].size(); ++i) {
+				if (data[v1][i].first == v2) {
+					++edgesCount;
+					FLAG = true;
+					break;
+				}
+			}
+			if (FLAG) continue;
+			w = gen_double(e);
+			data[v1].push_back(std::make_pair(v2, w));
 		}
 	}
 };

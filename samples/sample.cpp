@@ -1,13 +1,18 @@
 #include <iostream>
 #include <random>
 #include <string>
+#include "graphviz/gvc.h"
+#include "graphviz/cgraph.h"
 #include "myGraph.h"
 #include "binomialHeap.h"
 #include "binaryHeap.h"
 #include <limits>
 #include <chrono>
+#include <fstream>
 
 int main() {
+//    freopen("D:/Users/maksi/Desktop/dz_38/UNN/mp2-2024-lab6-Dijkstra/sln/theGraph.txt", "r", stdin);
+    
     std::cout << "Welcome to Dijkstra algorithm!\nPlease, enter a size for graph: " << std::endl;
     size_t sz;
     std::cin >> sz;
