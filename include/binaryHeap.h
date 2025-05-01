@@ -56,7 +56,7 @@ public:
         }
     }
     binaryHeap() :size(0) {}
-    const T& extractMin() {
+    T extractMin() {
         if (size == 0) return T();
         T res = data[0];
         data[0] = data[--size];
@@ -65,7 +65,7 @@ public:
         slideDown(0);
         return res;
     }
-    const T& searchMin() const {
+    T searchMin() const {
         return data[0];
     }
     bool isEmpty() const {

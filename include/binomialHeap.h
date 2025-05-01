@@ -21,7 +21,7 @@ public:
     bool isEmpty() const {
         return head == nullptr;
     }
-    const T& searchMin() const {
+    T searchMin() const {
         Node* tmp = head;
         T minkey;
         if (head == nullptr) return T();
@@ -31,16 +31,6 @@ public:
             tmp = tmp->sibling;
         }
         return minkey;
-    }
-
-    bool isCorrect() {
-        if (head == nullptr || head->sibling == nullptr) return true;
-        Node* tmp = head;
-        while (tmp->sibling != nullptr) {
-            if (tmp->degree <= tmp->sibling->degree) return false;
-            tmp = tmp->sibling;
-        }
-        return true;
     }
 
     Node* mergeBinomialTrees(Node* left, Node* right) {
@@ -60,62 +50,6 @@ public:
         res->degree++;
         return res;
     }
-
-    /*
-    void mergeHeapOld(binomialHeap& heap) {
-        if (head == nullptr) {
-            head = heap.head;
-            heap.head = nullptr;
-            return;
-        }
-        Node* lroot, * rroot, * tmproot1, * tmproot2;
-        lroot = head;
-        rroot = heap.head;
-        while (rroot != nullptr) {
-            if (rroot->degree > lroot->degree) {
-                if (lroot->sibling == nullptr || lroot->sibling->degree > rroot->degree) {
-                    tmproot1 = lroot->sibling;
-                    lroot->sibling = rroot;
-                    tmproot2 = rroot->sibling;
-                    rroot->sibling = tmproot1->sibling;
-                    rroot = tmproot2;
-                }
-                lroot = lroot->sibling;
-                continue;
-            }
-            else if (rroot->degree == lroot->degree) {
-                lroot = mergeBinomialTrees(rroot, lroot);
-                //                lroot = lroot->sibling;
-                rroot = rroot->sibling;
-            }
-            else {
-                std::cout << "Merge Heap error" << std::endl;
-                return;
-            }
-        }
-        heap.head = nullptr;
-        bool flag = true;
-        Node* tmpdel, * tmproot;
-        while (flag) {
-            flag = false;
-            tmproot = head;
-            while (tmproot != nullptr && tmproot->sibling != nullptr) {
-                if (tmproot->degree == tmproot->sibling->degree) {
-                    tmpdel = tmproot->sibling->sibling;
-                    tmproot->sibling = mergeBinomialTrees(tmproot, tmproot->sibling);
-                    tmproot->sibling = tmpdel;
-                    flag = true;
-                }
-                else if (tmproot->degree < tmproot->sibling->degree) {
-                    std::cout << "Error in heapMerge 2" << std::endl; //
-                    return;
-                }
-                tmproot = tmproot->sibling;
-            }
-        }
-        if (!isCorrect()) std::cout << "Bad merge" << std::endl; //
-    }
-    */
 
     void mergeHeap(binomialHeap& heap) {
         if (heap.head == nullptr) return;
@@ -167,7 +101,7 @@ public:
                 return;
             }
         }
-        heap.head = nullptr; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        heap.head = nullptr;
 
         bool flag = true;
         while (flag) {
@@ -199,7 +133,7 @@ public:
         mergeHeap(_heap);
     }
 
-    const T& extractMin() {
+    T extractMin() {
         if (head == nullptr) return T();
         T retdata;
         Node* minnode = head;
@@ -235,29 +169,6 @@ public:
 
         return retdata;
     }
-
-    /*
-    void print() {
-        std::cout << "printing tree:" << std::endl;
-        Node* tmp = head;
-        while (tmp != nullptr) {
-            std::cout << "   deg:" << tmp->degree << " ";
-            printBinomialTree(tmp);
-            tmp = tmp->sibling;
-        }
-        std::cout << std::endl;
-    }
-
-    void printBinomialTree(Node* root) {
-        if (root == nullptr) return;
-        std::cout << root->data << ":" << root->degree << " ";
-        Node* tmp = root->child;
-        while (tmp != nullptr) {
-            printBinomialTree(tmp);
-            tmp = tmp->sibling;
-        }
-    }
-    */
 
     ~binomialHeap() {
         while (head != nullptr)

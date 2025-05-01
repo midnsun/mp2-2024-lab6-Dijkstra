@@ -65,7 +65,7 @@ TEST(binaryHeap, extract_min_is_correct_1)
 	Q q;
 	q.add(0.0);
 	q.add(1.0);
-	EXPECT_EQ(std::abs(q.extractMin()) <= std::numeric_limits<double>::min(), true);
+	EXPECT_EQ(q.extractMin(), 0.0);
 }
 
 TEST(binaryHeap, extract_min_is_correct_2)
@@ -73,7 +73,28 @@ TEST(binaryHeap, extract_min_is_correct_2)
 	Q q;
 	q.add(1.0);
 	q.add(0.0);
-	EXPECT_EQ(std::abs(q.extractMin()) <= std::numeric_limits<double>::min(), true);
+	EXPECT_EQ(q.extractMin(), 0.0);
+}
+
+TEST(binaryHeap, extract_min_changes_min)
+{
+	Q q;
+	q.add(1.0);
+	q.add(0.0);
+	q.extractMin();
+	EXPECT_EQ(q.searchMin(), 1.0);
+}
+
+TEST(binaryHeap, extract_min_empty_returns_default)
+{
+	Q q;
+	EXPECT_EQ(q.extractMin(), double());
+}
+
+TEST(binaryHeap, search_min_empty_returns_default)
+{
+	Q q;
+	EXPECT_EQ(q.searchMin(), double());
 }
 
 TEST(binaryHeap, is_empty_is_correct_3)
@@ -96,7 +117,7 @@ TEST(binaryHeap, search_min_is_correct_1)
 	Q q;
 	q.add(0.0);
 	q.add(1.0);
-	EXPECT_EQ(std::abs(q.searchMin()) <= std::numeric_limits<double>::min(), true);
+	EXPECT_EQ(q.searchMin(), 0.0);
 }
 
 TEST(binaryHeap, search_min_is_correct_2)
@@ -104,7 +125,7 @@ TEST(binaryHeap, search_min_is_correct_2)
 	Q q;
 	q.add(1.0);
 	q.add(0.0);
-	EXPECT_EQ(std::abs(q.searchMin()) <= std::numeric_limits<double>::min(), true);
+	EXPECT_EQ(q.searchMin(), 0.0);
 }
 
 TEST(binaryHeap, multiple_add_and_extract_is_correct)
