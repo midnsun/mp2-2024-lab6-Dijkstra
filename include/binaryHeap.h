@@ -3,6 +3,9 @@
 #include "myVector.h"
 template<typename T>
 class binaryHeap {
+    #ifdef TEST_MODE
+	public:
+	#endif
     myVector<T> data;
     int size;
 public:

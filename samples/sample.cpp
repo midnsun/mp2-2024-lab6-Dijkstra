@@ -11,8 +11,8 @@
 #include <fstream>
 
 int main() {
-//    freopen("D:/Users/maksi/Desktop/dz_38/UNN/mp2-2024-lab6-Dijkstra/sln/theGraph.txt", "r", stdin);
-    
+//    freopen("../theGraph.txt", "r", stdin);
+
     std::cout << "Welcome to Dijkstra algorithm!\nPlease, enter a size for graph: " << std::endl;
     size_t sz;
     std::cin >> sz;
@@ -26,10 +26,13 @@ int main() {
             std::cin >> c;
             switch (c) {
             case 'g':
-                G.generate();
+                std::cout << "Enter count of edges: " << std::endl;
+                size_t edgesCount;
+                std::cin >> edgesCount;
+                G.generate(edgesCount);
                 break;
             case 'm':
-                G.scan();                                      
+                G.scan(std::cin);                                      
                 break;
             case 'q':
                 std::cout << "Quitting" << std::endl;

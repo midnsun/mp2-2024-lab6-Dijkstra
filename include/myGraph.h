@@ -2,7 +2,8 @@
 #include <iostream>
 #include <random>
 #include <limits>
-#include "../Graphviz/include/graphviz/gvc.h"
+//#include "../Graphviz/include/graphviz/gvc.h"
+#include "myVector.h"
 
 template<typename T>
 bool operator <(const std::pair<size_t, T>& v1, const std::pair<size_t, T>& v2) { return v1.second < v2.second; }
@@ -17,9 +18,9 @@ bool operator ==(const std::pair<size_t, T>& v1, const std::pair<size_t, T>& v2)
 template<typename T>
 bool operator !=(const std::pair<size_t, T>& v1, const std::pair<size_t, T>& v2) { return v1.second != v2.second; }
 
-#include "myMatrix.h"
-#include "binomialHeap.h"
-#include "binaryHeap.h"
+//#include "myMatrix.h"
+//#include "binomialHeap.h"
+//#include "binaryHeap.h"
 
 /*
 template <typename T>
@@ -106,6 +107,9 @@ public:
 
 template <typename T>
 class myGraph {
+	#ifdef TEST_MODE
+	public:
+	#endif
 	myVector<myVector<std::pair<size_t, T>>> data;
 
 public:
@@ -182,23 +186,20 @@ public:
 //		delete[] charCOLOR;
 //		
 	}
-	void scan() {
+	void scan(std::istream& is) {
 		size_t e, en;
 		T w;
 		for (size_t i = 0; i < data.size(); ++i) {
 			std::cout << "Enter how many vertices are adjacented with vertex " << i << ". Than enter all adjacent vertices with its number and weights in a row: " << std::endl;
-			std::cin >> en;
+			is >> en;
 			for (size_t j = 0; j < en; ++j) {
-				std::cin >> e >> w;
+				is >> e >> w;
 				data[i].push_back(std::make_pair(e, w));
 			}
 			std::cout << std::endl;
 		}
 	}
-	void generate() {
-		std::cout << "Enter count of edges: " << std::endl;
-		size_t edgesCount;
-		std::cin >> edgesCount;
+	void generate(size_t edgesCount) {
 
 		std::random_device r;
 		std::default_random_engine e(r());
@@ -226,7 +227,7 @@ public:
 			}
 			if (FLAG) continue;
 			w = gen_double(e);
-			data[v1].push_back(std::make_pair(v2, w));
+			data[v1].push_back(std::make_pair(v2, T(w)));
 		}
 	}
 };
@@ -234,6 +235,9 @@ public:
 
 template <typename T, template<typename> class Q>
 class Dijkstra {
+	#ifdef TEST_MODE
+	public:
+	#endif
 	const myGraph<T>& G;
 	myVector<T> dist;
 public:
@@ -241,6 +245,7 @@ public:
 		calculate(v);
 	}
 	T getDistance(size_t n) {
+		if (n >= G.size()) throw std::logic_error("Invalid number of vertex to find distance to");
 		return dist[n];
 	}
 	void calculate(size_t v) {
@@ -264,8 +269,8 @@ public:
 		}
 	}
 	bool isConnected() {
-		for (const T& d : dist)
-			if (d == std::numeric_limits<T>::max())
+		for (size_t i = 0; i < dist.size(); ++i)
+			if (dist[i] == std::numeric_limits<T>::max())
 				return false;
 		return true;
 	}

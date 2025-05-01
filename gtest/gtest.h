@@ -316,6 +316,7 @@
 #define GTEST_FLAG_PREFIX_UPPER_ "GTEST_"
 #define GTEST_NAME_ "Google Test"
 #define GTEST_PROJECT_URL_ "http://code.google.com/p/googletest/"
+#define TEST_MODE
 
 // Determines the version of gcc that is used to compile this.
 #ifdef __GNUC__

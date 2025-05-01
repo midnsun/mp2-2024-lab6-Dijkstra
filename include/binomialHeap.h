@@ -3,6 +3,9 @@
 #include "myMatrix.h"
 template <typename T>
 class binomialHeap {
+    #ifdef TEST_MODE
+	public:
+	#endif
     struct Node {
         int degree;
         Node* child;
