@@ -5,6 +5,9 @@
 #include <limits>
 #include "../Graphviz/include/graphviz/gvc.h"
 #include "myVector.h"
+#include <string>
+#include <iomanip>
+#include <sstream>
 
 template<typename T>
 bool operator <(const std::pair<size_t, T>& v1, const std::pair<size_t, T>& v2) { return v1.second < v2.second; }
@@ -38,6 +41,7 @@ public:
 	void print() const {
 		std::string dotpath = "../example.dot";
 		std::string pngpath = "../../image_file.png";
+		std::string svgpath = "../../image_file.svg";
 		
 //		for (size_t i = 0; i < data.size(); ++i) {
 //			std::cout << i << '\t';
@@ -46,21 +50,49 @@ public:
 //			}
 //			std::cout << std::endl;
 //		}
-		
+//		
+//		GVC_t* gvc = gvContext();
+//		Agraph_t* g = agopen(const_cast<char*>("G"), Agdirected, nullptr);
+//
+//		Agnode_t* n1 = agnode(g, const_cast<char*>("Node1"), true);
+//		Agnode_t* n2 = agnode(g, const_cast<char*>("Node2"), true);
+//
+//		agedge(g, n1, n2, nullptr, true);
+//		gvLayout(gvc, g, "dot");  // You can use "dot", "neato", etc.
+//		gvRenderFilename(gvc, g, "png", pngpath.c_str());
+//
+//		gvFreeLayout(gvc, g);
+//		agclose(g);
+//		gvFreeContext(gvc);
+//		std::cout << "See your result in image_file.png" << std::endl;
+
 		GVC_t* gvc = gvContext();
-		Agraph_t* g = agopen(const_cast<char*>("G"), Agdirected, nullptr);
+		Agraph_t* g = agopen(const_cast<char*>("G"), Agstrictdirected, nullptr); // strict directed
+		agattr(g, AGEDGE, const_cast<char*>("label"), const_cast<char*>(""));
+		myVector<Agnode_t*> nodes(data.size());
+		std::stringstream weightStr;
+		weightStr << std::fixed << std::setprecision(2);
 
-		Agnode_t* n1 = agnode(g, const_cast<char*>("Node1"), true);
-		Agnode_t* n2 = agnode(g, const_cast<char*>("Node2"), true);
+		for (size_t i = 0; i < data.size(); ++i) {
+			nodes[i] = agnode(g, const_cast<char*>(std::to_string(i).c_str()), 1);
+		}
 
-		agedge(g, n1, n2, nullptr, true);
-		gvLayout(gvc, g, "dot");  // You can use "dot", "neato", etc.
+		for (size_t u = 0; u < data.size(); ++u) {
+			for (size_t i = 0; i < data[u].size(); ++i) {
+				Agedge_t* e = agedge(g, nodes[u], nodes[data[u][i].first], nullptr, 1);
+				weightStr.str("");
+				weightStr << data[u][i].second;
+				agset(e, const_cast<char*>("label"), _strdup(weightStr.str().c_str()));
+			}
+		}
+
+		gvLayout(gvc, g, "dot");
 		gvRenderFilename(gvc, g, "png", pngpath.c_str());
-
+//		gvRenderFilename(gvc, g, "svg", svgpath.c_str());
 		gvFreeLayout(gvc, g);
 		agclose(g);
 		gvFreeContext(gvc);
-		std::cout << "See your result in image_file.png" << std::endl;
+
 	}
 	void scan(std::istream& is) {
 		size_t e, en;
