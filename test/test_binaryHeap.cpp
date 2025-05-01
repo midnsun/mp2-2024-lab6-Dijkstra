@@ -126,3 +126,71 @@ TEST(binaryHeap, multiple_add_and_extract_is_correct)
 	}
 	EXPECT_EQ(true, isVectorSorted(v));
 }
+
+TEST(binaryHeap, can_slide_up)
+{
+	Q q;
+	q.add(1.0);
+	q.add(0.0);
+	q.add(2.0);
+	q.add(-1.0);
+	q.add(3.0);
+	q.add(3.0);
+	q.add(4.0);
+	q.add(-2.0);
+	q.add(10.0);
+	q.add(5.0);
+	ASSERT_NO_THROW(q.slideUp(5));
+}
+
+TEST(binaryHeap, can_slide_down)
+{
+	Q q;
+	q.add(1.0);
+	q.add(0.0);
+	q.add(2.0);
+	q.add(-1.0);
+	q.add(3.0);
+	q.add(3.0);
+	q.add(4.0);
+	q.add(-2.0);
+	q.add(10.0);
+	q.add(5.0);
+	ASSERT_NO_THROW(q.slideDown(5));
+}
+
+TEST(binaryHeap, slide_up_is_correct)
+{
+	Q q;
+	q.add(1.0);
+	q.add(0.0);
+	q.add(2.0);
+	q.add(-1.0);
+	q.add(3.0);
+	q.add(3.0);
+	q.add(4.0);
+	q.add(-2.0);
+	q.add(10.0);
+	q.add(5.0);
+	q.data.push_back(-10.0);
+	q.slideUp(10);
+	EXPECT_EQ(q.data[0], -10.0);
+}
+
+TEST(binaryHeap, slide_down_is_correct)
+{
+	Q q;
+	q.add(1.0);
+	q.add(0.0);
+	q.add(2.0);
+	q.add(-1.0);
+	q.add(3.0);
+	q.add(3.0);
+	q.add(4.0);
+	q.add(-2.0);
+	q.add(10.0);
+	q.add(5.0);
+	q.data[0] = 10.0;
+	q.slideDown(0);
+	EXPECT_EQ(q.data[0], -1.0);
+}
