@@ -148,13 +148,26 @@ class Dijkstra {
 	#endif
 	const myGraph<T>& G;
 	myVector<T> dist;
+	myVector<size_t> pathes;
 public:
-	Dijkstra(const myGraph<T>& _G, size_t v) : G(_G), dist(_G.size(), std::numeric_limits<T>::max()) {
+	Dijkstra(const myGraph<T>& _G, size_t v) : G(_G), dist(_G.size(), std::numeric_limits<T>::max()), pathes(_G.size(), std::numeric_limits<size_t>::max()) {
 		calculate(v);
 	}
 	T getDistance(size_t n) {
 		if (n >= G.size()) throw std::logic_error("Invalid number of vertex to find distance to");
 		return dist[n];
+	}
+	myVector<size_t> getPath(size_t n) {
+		if (n >= G.size()) throw std::logic_error("Invalid number of vertex to find path to");
+		myVector<size_t> v;
+		size_t tmp;
+		for (; n != std::numeric_limits<size_t>::max(); n = pathes[n]) v.push_back(n);
+		for (size_t i = 0; i < v.size() / 2; ++i) {
+			tmp = v[i];
+			v[i] = v[v.size() - 1 - i];
+			v[v.size() - 1 - i] = tmp;
+		}
+		return v;
 	}
 	void calculate(size_t v) {
 		if (v >= G.size()) throw std::logic_error("Invalid number of vertex to find distances from");
@@ -172,6 +185,7 @@ public:
 				if (dist[eit.first] > dist[e.first] + eit.second) {
 					dist[eit.first] = dist[e.first] + eit.second;
 					q.add(std::make_pair(eit.first, dist[eit.first]));
+					pathes[eit.first] = e.first;
 				}
 			}
 		}

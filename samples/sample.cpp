@@ -19,6 +19,7 @@ int main() {
     myGraph<double> G(sz);
     std::chrono::steady_clock::time_point start, finish;
     uint64_t time;
+    myVector<size_t> p;
     try {
         char c = 0;
         while (c != 'q') {
@@ -44,7 +45,7 @@ int main() {
                 break;
             }
 
-            std::cout << "Your graph is: " << std::endl;
+            std::cout << "Your graph is (check png file): " << std::endl;
             G.print();
             size_t n;
             std::cout << "Enter a number of a vertex for what you want to know all the distances for other vertices: " << std::endl;
@@ -67,6 +68,10 @@ int main() {
                 std::cin >> n;
                 if (n >= G.size()) break;
                 std::cout << "For binary heap dijkstra: " << D1.getDistance(n) << "; For binomial heap dijkstra: " << D2.getDistance(n) << std::endl;
+                std::cout << "Path to the vertex is: ";
+                p = D1.getPath(n);
+                for (size_t i = 0; i < p.size(); ++i) std::cout << p[i] << " ";
+                std::cout << std::endl;
             }
         }
     }

@@ -109,6 +109,68 @@ TEST(dijkstra, get_distance_is_correct)
 	}
 }
 
+TEST(dijkstra, can_get_path)
+{
+	myGraph<double> G(15);
+	std::string s = "2 5 20 1 15 3 0 15 6 0 2 25 3 1 25 3 10 7 70 2 2 10 8 50 1 9 10 2 0 20 10 30 3 1 0 7 40 10 10 4 6 40 2 70 8 30 12 60 4 7 30 12 5 13 70 3 50 2 4 10 14 25 3 5 30 6 10 11 10 2 10 10 12 35 4 11 35 7 60 8 5 13 70 2 12 70 8 70 1 9 25 7";
+	std::istringstream s1;
+	s1.str(s);
+	G.scan(s1);
+	std::vector<double> example = { 55, 40, 65, 75, std::numeric_limits<double>::max(), 75, 40, 0, 30, std::numeric_limits<double>::max(), 50, 60, 35, 100, std::numeric_limits<double>::max() };
+
+	Dijkstra<double, binomialHeap> D(G, 7);
+	ASSERT_NO_THROW(D.getPath(0));
+}
+
+TEST(dijkstra, cannot_get_path)
+{
+	myGraph<double> G(15);
+	std::string s = "2 5 20 1 15 3 0 15 6 0 2 25 3 1 25 3 10 7 70 2 2 10 8 50 1 9 10 2 0 20 10 30 3 1 0 7 40 10 10 4 6 40 2 70 8 30 12 60 4 7 30 12 5 13 70 3 50 2 4 10 14 25 3 5 30 6 10 11 10 2 10 10 12 35 4 11 35 7 60 8 5 13 70 2 12 70 8 70 1 9 25 7";
+	std::istringstream s1;
+	s1.str(s);
+	G.scan(s1);
+	std::vector<double> example = { 55, 40, 65, 75, std::numeric_limits<double>::max(), 75, 40, 0, 30, std::numeric_limits<double>::max(), 50, 60, 35, 100, std::numeric_limits<double>::max() };
+
+	Dijkstra<double, binomialHeap> D(G, 7);
+	ASSERT_ANY_THROW(D.getPath(15));
+}
+
+TEST(dijkstra, get_path_is_correct)
+{
+	myGraph<double> G(15);
+	std::string s = "2 5 20 1 15 3 0 15 6 0 2 25 3 1 25 3 10 7 70 2 2 10 8 50 1 9 10 2 0 20 10 30 3 1 0 7 40 10 10 4 6 40 2 70 8 30 12 60 4 7 30 12 5 13 70 3 50 2 4 10 14 25 3 5 30 6 10 11 10 2 10 10 12 35 4 11 35 7 60 8 5 13 70 2 12 70 8 70 1 9 25 7";
+	std::istringstream s1;
+	s1.str(s);
+	G.scan(s1);
+	std::vector<std::vector<size_t>> example = { 
+		{7, 6, 1, 0},
+		{7, 6, 1},
+		{7, 6, 1, 2},
+		{7, 6, 1, 2, 3},
+		{4},
+		{7, 6, 1, 0, 5},
+		{7, 6},
+		{7},
+		{7, 8},
+		{9},
+		{7, 6, 10},
+		{7, 6, 10, 11},
+		{7, 8, 12},
+		{7, 8, 13},
+		{14}
+	};
+	myVector<size_t> p;
+
+	Dijkstra<double, binomialHeap> D(G, 7);
+	for (size_t i = 0; i < D.G.size(); ++i) {
+		p = D.getPath(i);
+		EXPECT_EQ(p.size(), example[i].size());
+		for (size_t j = 0; j < p.size(); ++j) {
+			EXPECT_EQ(p[j], example[i][j]);
+		}
+	}
+}
+
 TEST(dijkstra, can_is_connected)
 {
 	myGraph<double> G(15);
