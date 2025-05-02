@@ -88,3 +88,9 @@ TEST(myGraph, scan_is_correct) {
 	EXPECT_EQ(g.data[13].size(), 2); EXPECT_EQ(g.data[13][0], std::make_pair(12ull, 70.0)); EXPECT_EQ(g.data[13][1], std::make_pair(8ull, 70.0));
 	EXPECT_EQ(g.data[14].size(), 1); EXPECT_EQ(g.data[14][0], std::make_pair(9ull, 25.0));
 }
+
+TEST(myGraph, can_print) {
+	myGraph<double> g(15);
+	g.generate(10);
+	ASSERT_NO_THROW(g.print());
+}
