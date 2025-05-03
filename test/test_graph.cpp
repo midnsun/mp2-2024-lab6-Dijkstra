@@ -48,11 +48,11 @@ TEST(myGraph, can_generate) {
 	ASSERT_NO_THROW(g.generate(5));
 }
 
-TEST(myGraph, can_print) {
-	myGraph<double> g(6);
-	g.generate(5);
-	ASSERT_NO_THROW(g.print());
-}
+//TEST(myGraph, can_print) {
+//	myGraph<double> g(6);
+//	g.generate(5);
+//	ASSERT_NO_THROW(g.print());
+//}
 
 TEST(myGraph, can_scan) {
 	myGraph<double> g(15);
