@@ -7,5 +7,5 @@ find_library(GVC_LIBRARY "../Graphviz/lib/gvc.lib")
 find_library(CGRAPH_LIBRARY "../Graphviz/lib/cgraph.lib")
 
 link_libraries(${GVC_LIBRARY} ${CGRAPH_LIBRARY})
-add_executable(${target} ${srcs} ${hdrs})
-target_link_libraries(${GVC_LIBRARY} ${CGRAPH_LIBRARY} ${target} gtest)
+add_executable(${target} graphviz_example ${srcs} ${hdrs})
+target_link_libraries(${GVC_LIBRARY} ${CGRAPH_LIBRARY} graphviz_example ${target} gtest)
