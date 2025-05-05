@@ -1,8 +1,10 @@
 #include <iostream>
 #include <random>
 #include <string>
+#ifndef _CMAKE_
 #include "graphviz/gvc.h"
 #include "graphviz/cgraph.h"
+#endif
 #include "myGraph.h"
 #include "binomialHeap.h"
 #include "binaryHeap.h"
@@ -46,7 +48,9 @@ int main() {
             }
 
             std::cout << "Your graph is (check png file): " << std::endl;
+#ifndef _CMAKE_
             G.print();
+#endif 
             size_t n;
             std::cout << "Enter a number of a vertex for what you want to know all the distances for other vertices: " << std::endl;
             std::cin >> n;
