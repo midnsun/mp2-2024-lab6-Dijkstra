@@ -67,7 +67,13 @@ int main() {
                 std::cout << "Enter a number of a vertex in graph for which you want to know its distance. For quit enter any number bigger than a size of the graph: " << std::endl;
                 std::cin >> n;
                 if (n >= G.size()) break;
-                std::cout << "For binary heap dijkstra: " << D1.getDistance(n) << "; For binomial heap dijkstra: " << D2.getDistance(n) << std::endl;
+                double d1 = D1.getDistance(n);
+                double d2 = D2.getDistance(n);
+                if (d1 == std::numeric_limits<double>::max()) d1 = std::numeric_limits<double>::infinity();
+                if (d2 == std::numeric_limits<double>::max()) d2 = std::numeric_limits<double>::infinity();
+                std::cout << "For binary heap dijkstra: " << d1 << "; For binomial heap dijkstra: " << d2 << ".";
+                if (d1 == std::numeric_limits<double>::infinity() || d2 == std::numeric_limits<double>::infinity()) std::cout << " This vertex is in other connectivity component";
+                std::cout << std::endl;
                 std::cout << "Path to the vertex is: ";
                 p = D1.getPath(n);
                 for (size_t i = 0; i < p.size(); ++i) std::cout << p[i] << " ";

@@ -38,6 +38,7 @@ public:
 	size_t size() const {
 		return data.size();
 	}
+	#ifndef _CMAKE_
 	void print() const {
 		std::string dotpath = "../example.dot";
 		std::string pngpath = "../../image_file.png";
@@ -94,6 +95,7 @@ public:
 		gvFreeContext(gvc);
 
 	}
+	#endif
 	void scan(std::istream& is) {
 		size_t e, en;
 		T w;
