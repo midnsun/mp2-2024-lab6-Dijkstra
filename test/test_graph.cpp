@@ -70,7 +70,6 @@ TEST(myGraph, scan_is_correct) {
 	s1.str(s);
 
 	g.scan(s1);
-	g.print();
 
 	EXPECT_EQ(g.data[0].size(), 2); EXPECT_EQ(g.data[0][0], std::make_pair(5ull, 20.0)); EXPECT_EQ(g.data[0][1], std::make_pair(1ull, 15.0));
 	EXPECT_EQ(g.data[1].size(), 3); EXPECT_EQ(g.data[1][0], std::make_pair(0ull, 15.0)); EXPECT_EQ(g.data[1][1], std::make_pair(6ull, 0.0)); EXPECT_EQ(g.data[1][2], std::make_pair(2ull, 25.0));
