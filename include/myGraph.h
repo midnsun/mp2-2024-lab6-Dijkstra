@@ -68,7 +68,7 @@ public:
 //		std::cout << "See your result in image_file.png" << std::endl;
 
 		GVC_t* gvc = gvContext();
-		Agraph_t* g = agopen(const_cast<char*>("G"), Agstrictdirected, nullptr); // strict directed
+		Agraph_t* g = agopen(const_cast<char*>("G"), Agstrictundirected, nullptr); // strict directed
 		agattr(g, AGEDGE, const_cast<char*>("label"), const_cast<char*>(""));
 		myVector<Agnode_t*> nodes(data.size());
 		std::stringstream weightStr;
@@ -96,6 +96,21 @@ public:
 
 	}
 	#endif
+protected:
+	void _scan_test(std::istream& is) {
+		size_t e, en;
+		T w;
+		for (size_t i = 0; i < data.size(); ++i) {
+//			std::cout << "Enter how many vertices are adjacented with vertex " << i << ". Than enter all adjacent vertices with its number and weights in a row: " << std::endl;
+			is >> en;
+			for (size_t j = 0; j < en; ++j) {
+				is >> e >> w;
+				data[i].push_back(std::make_pair(e, w));
+			}
+//			std::cout << std::endl;
+		}
+	}
+public:
 	void scan(std::istream& is) {
 		size_t e, en;
 		T w;
@@ -104,21 +119,61 @@ public:
 			is >> en;
 			for (size_t j = 0; j < en; ++j) {
 				is >> e >> w;
+				std::cout << j << ": " << e << " " << w << std::endl;
+				for (size_t k = 0; k < data[i].size(); ++k) if (data[i][k].first == e) throw std::runtime_error("This edge has already exists");
 				data[i].push_back(std::make_pair(e, w));
+				for (size_t k = 0; k < data[e].size(); ++k) if (data[e][k].first == i) throw std::runtime_error("This edge has already exists");
+				data[e].push_back(std::make_pair(i, w));
 			}
 			std::cout << std::endl;
 		}
 	}
 	void generate(size_t edgesCount) {
-
+		if (edgesCount < data.size() - 1) throw std::runtime_error("egdes count must be higher or equals than size of the graph - 1");
 		std::random_device r;
 		std::default_random_engine e(r());
 		std::uniform_int_distribution<size_t> gen_int(0, data.size() - 1);
 		size_t v1, v2, i;
+		for (i = 0; i < data.size(); ++i) data[i].resize(0);
 		std::uniform_real_distribution<double> gen_double(0.0, 1000.0);
 		double w;
-		bool FLAG;
-
+		bool FLAG = false;
+		edgesCount -= data.size() - 1;
+		myVector<size_t> pruferSequence;
+		myVector<int> degree(data.size() - 1, 1);
+		for (i = 0; i < data.size() - 2; ++i) {
+			v1 = gen_int(e);
+			pruferSequence.push_back(v1);
+			++degree[v1];
+		}
+		for (i = 0; i < pruferSequence.size(); ++i) {
+			for (v1 = 0; v1 < degree.size(); ++v1) {
+				if (degree[v1] == 1) {
+					v2 = pruferSequence[i];
+					--degree[v1];
+					--degree[v2];
+					w = gen_double(e);
+					data[v1].push_back(std::make_pair(v2, T(w)));
+					data[v2].push_back(std::make_pair(v1, T(w)));
+					break;
+				}
+			}
+		}
+		for (i = 0; i < degree.size(); ++i) {
+			if (degree[i] == 1) {
+				--degree[i];
+				v1 = i;
+				break;
+			}
+		}
+		w = gen_double(e);
+		data[v1].push_back(std::make_pair(data.size() - 1, T(w)));
+		data[data.size() - 1].push_back(std::make_pair(v1, T(w)));
+//		for (i = 0; i < degree.size(); ++i) {
+//			std::cout << degree[i] << std::endl;
+//			if (degree[i] != 0) throw std::runtime_error("ERROR!!!");
+//		}
+		
 		while (edgesCount > 0) {
 			--edgesCount;
 			v1 = gen_int(e);
@@ -138,6 +193,7 @@ public:
 			if (FLAG) continue;
 			w = gen_double(e);
 			data[v1].push_back(std::make_pair(v2, T(w)));
+			data[v2].push_back(std::make_pair(v1, T(w)));
 		}
 	}
 };

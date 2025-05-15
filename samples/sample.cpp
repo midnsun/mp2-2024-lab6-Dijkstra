@@ -29,10 +29,11 @@ int main() {
             std::cin >> c;
             switch (c) {
             case 'g':
-                std::cout << "Enter count of edges: " << std::endl;
+                std::cout << "Enter count of edges. It must be a number, higher or equals than size of the graph - 1: " << std::endl;
                 size_t edgesCount;
                 std::cin >> edgesCount;
                 G.generate(edgesCount);
+//                G.print();
                 break;
             case 'm':
                 G.scan(std::cin);                                      
@@ -45,6 +46,12 @@ int main() {
                 std::cout << "Unknown input. Qutting" << std::endl;
                 return 0;
                 break;
+            }
+
+            Dijkstra<double, binaryHeap> D(G, 0);
+            if (!D.isConnected()) {
+                std::cout << "Your graph is unconnected. Qutting" << std::endl;
+                return 0;
             }
 
             std::cout << "Your graph is (check png file): " << std::endl;
